@@ -31,13 +31,17 @@ const UserRepo = () => {
 
   useEffect(() => {
     if (searchRepository) {
-      const options = searchRepository.map((repo: any) => {
-        return {
-          value: repo.id,
-          label: repo.name,
-        };
-      });
-      setOptions(options);
+      if (searchRepository.length === 1) {
+        navigate(`?libraryId=${searchRepository[0].id}`);
+      } else {
+        const options = searchRepository.map((repo: any) => {
+          return {
+            value: repo.id,
+            label: repo.name,
+          };
+        });
+        setOptions(options);
+      }
     }
   }, [searchRepository]);
 
@@ -72,7 +76,7 @@ const UserRepo = () => {
           <List data={userRepositoriesByUserId} />
         </ScrollArea>
         {libraryId && (
-          <ScrollArea className="basis-1/4 flex  flex-col items-center  max-h-screen overflow-y-auto p-12">
+          <ScrollArea className="basis-3/4 flex  flex-col items-center  max-h-screen overflow-y-auto p-12">
             <RepoDetails id={libraryId} isExistingRepo={isExistingRepo} />
           </ScrollArea>
         )}

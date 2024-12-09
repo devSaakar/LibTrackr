@@ -5,6 +5,7 @@ import {
   GET_USER_REPOSITORIES,
 } from "../queries";
 import { Button } from "./ui/button";
+import ReleaseNotes from "./ReleaseNotes";
 
 interface RepoDetailsProps {
   id: string;
@@ -26,7 +27,7 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({ id, isExistingRepo }) => {
   );
 
   const { repository } = data || {};
-  const { name, description, version, releaseNotes } = repository || {};
+  const { name, description, version, release_notes } = repository || {};
   const handleClick = () => {
     addUserRepository({
       variables: {
@@ -40,9 +41,9 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({ id, isExistingRepo }) => {
     <div>
       <div>{name}</div>
       <div>{version}</div>
-      <div>{description}</div>
-      <div>{releaseNotes}</div>
       {!isExistingRepo && <Button onClick={handleClick}>Add</Button>}
+      <div>{description}</div>
+      <ReleaseNotes releaseNotes={release_notes} />
     </div>
   );
 };
