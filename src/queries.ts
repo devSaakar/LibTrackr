@@ -88,3 +88,14 @@ export const REMOVE_USER_REPOSITORY = gql`
     }
   }
 `;
+
+export const UPDATE_USER_REPOSITORY_VERSION = gql`
+  mutation UpdateUserRepo($id: ID!, $user_repository_version: String!) {
+    updateUserRepository(
+      id: $id
+      edits: { user_repository_version: $user_repository_version }
+    ) {
+      id
+    }
+  }
+`;

@@ -13,6 +13,7 @@ const UserRepo = () => {
   const location = useLocation();
 
   const searchParams = new URLSearchParams(location.search);
+  const code = searchParams.get("code");
   const libraryId = searchParams.get("libraryId");
 
   const { data } = useQuery(GET_USER_REPOSITORIES, {
@@ -64,6 +65,12 @@ const UserRepo = () => {
     );
   }, [userRepositoriesByUserId, libraryId]);
 
+  const userRepoDetail = useMemo(() => {
+    return userRepositoriesByUserId?.find(
+      (repo: any) => repo.repository.id === libraryId
+    );
+  }, [userRepositoriesByUserId, libraryId]);
+
   return (
     <div className="flex flex-col px-12">
       <AutoComplete
@@ -77,7 +84,11 @@ const UserRepo = () => {
         </ScrollArea>
         {libraryId && (
           <ScrollArea className="basis-3/4 flex  flex-col items-center  max-h-screen overflow-y-auto p-12">
-            <RepoDetails id={libraryId} isExistingRepo={isExistingRepo} />
+            <RepoDetails
+              id={libraryId}
+              isExistingRepo={isExistingRepo}
+              userRepoDetail={userRepoDetail}
+            />
           </ScrollArea>
         )}
       </div>
