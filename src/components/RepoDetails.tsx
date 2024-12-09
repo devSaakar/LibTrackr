@@ -76,9 +76,13 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
         <div className="flex flex-col gap-8">
           <div className="flex flex-row justify-between">
             <BackButton className={"lg:hidden"} onClick={handleBack} />
-            <div className="flex flex-row gap-4">
-              {name && <p className="text-4xl font-bold	">{name} :</p>}
-              <p className="text-4xl font-semibold">{version}</p>
+            <div className="flex flex-col lg:flex-row lg:gap-4">
+              {name && (
+                <p className="text-lg lg:text-4xl font-semibold lg:font-bold	">
+                  {name}
+                </p>
+              )}
+              <p className="text-md lg:text-4xl  font-semibold">{version}</p>
             </div>
             {isExistingRepo &&
               (user_repository_version !== version ? (
