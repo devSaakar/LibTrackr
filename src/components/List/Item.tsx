@@ -37,15 +37,13 @@ const Item = ({ data }: any) => {
   };
   return (
     <div
+      onClick={handleClick}
       className={cn(
         "my-4 border-2 border-gray-300 flex rounded-md justify-between px-4 py-1 items-center cursor-pointer ",
         id === libraryId ? "border-gray-600" : ""
       )}
     >
-      <div
-        onClick={handleClick}
-        className="flex gap-1  p-2 cursor-pointer justify-start"
-      >
+      <div className="flex gap-1  p-2 cursor-pointer justify-start">
         <div className="flex gap-1 items-center">
           <p className="font-bold">{name} - </p>
           <p>{version}</p>
