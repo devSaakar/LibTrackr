@@ -7,6 +7,8 @@ import {
 } from "../queries";
 import { Button } from "./ui/button";
 import ReleaseNotes from "./ReleaseNotes";
+import BackButton from "./ui/back-button";
+import { useNavigate } from "react-router-dom";
 
 interface RepoDetailsProps {
   id: string;
@@ -19,6 +21,8 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
   isExistingRepo,
   userRepoDetail,
 }) => {
+  const navigate = useNavigate();
+
   const { loading, error, data } = useQuery(GET_REPOSITORY, {
     variables: { id },
   });
@@ -58,6 +62,12 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
     });
   };
 
+  const handleBack = () => {
+    navigate({
+      pathname: window.location.pathname,
+    });
+  };
+
   return (
     <div>
       {loading ? (
@@ -65,6 +75,7 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
       ) : (
         <div className="flex flex-col gap-8">
           <div className="flex flex-row justify-between">
+            <BackButton className={"lg:hidden"} onClick={handleBack} />
             <div className="flex flex-row gap-4">
               {name && <p className="text-4xl font-bold	">{name} :</p>}
               <p className="text-4xl font-semibold">{version}</p>

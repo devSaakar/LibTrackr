@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import AutoComplete from "../components/ui/auto-complete";
 import { debounce } from "../helperUtils";
 import { Button } from "../components/ui/button";
+import { cn } from "../lib/utils";
 
 const UserRepo = () => {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ const UserRepo = () => {
     }
   );
 
-  
   const { data: searchData } = useQuery(SEARCH_REPOSITORY, {
     variables: { search: searchValue },
     skip: !searchValue,
@@ -100,8 +100,8 @@ const UserRepo = () => {
   };
 
   return (
-    <div className="flex flex-col px-8 ">
-      <div className="flex flex-row">
+    <div className="flex flex-col md:px-2 lg:px-8 ">
+      <div className="flex flex-col lg:flex-row">
         <ScrollArea className="basis-1/4 flex flex-col justify-start items-center  max-h-screen  overflow-y-auto px-4 cursor-pointer">
           <div className="flex flex-row items-start mt-4 gap-2">
             <AutoComplete
@@ -113,10 +113,17 @@ const UserRepo = () => {
               Add
             </Button>
           </div>
-          <List data={userRepositoriesByUserId} />
+          <div className={cn(libraryId ? "hidden lg:block" : "block")}>
+            <List data={userRepositoriesByUserId} />
+          </div>
         </ScrollArea>
         {libraryId && (
-          <ScrollArea className="basis-3/4 flex  flex-col items-center  max-h-screen overflow-y-auto p-12">
+          <ScrollArea
+            className={cn(
+              "lg:basis-3/4 flex  flex-col items-center  max-h-screen overflow-y-auto p-4 lg:p-10",
+              libraryId ? "block" : "hidden"
+            )}
+          >
             <RepoDetails
               id={libraryId}
               isExistingRepo={isExistingRepo}
