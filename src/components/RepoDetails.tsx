@@ -33,17 +33,27 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({ id, isExistingRepo }) => {
       variables: {
         user_id: "1",
         repository_id: id,
+        user_repository_version: version,
       },
     });
   };
 
   return (
-    <div>
-      <div>{name}</div>
-      <div>{version}</div>
-      {!isExistingRepo && <Button onClick={handleClick}>Add</Button>}
-      <div>{description}</div>
-      <ReleaseNotes releaseNotes={release_notes} />
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-row gap-4">
+          <p className="text-4xl font-bold	">{name} :</p>
+          <p className="text-4xl font-semibold">{version}</p>
+        </div>
+        {!isExistingRepo && <Button onClick={handleClick}>Add</Button>}
+      </div>
+      <p>{description}</p>
+      {release_notes?.length && (
+        <div className="flex flex-col gap-2">
+          <p className="text-3xl font-bold">Release Notes</p>
+          <ReleaseNotes releaseNotes={release_notes} />
+        </div>
+      )}
     </div>
   );
 };

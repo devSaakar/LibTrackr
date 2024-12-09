@@ -14,6 +14,7 @@ export const GET_USER_REPOSITORIES = gql`
   query GetUserRepoQuery($user_id: ID!) {
     userRepositoriesByUserId(user_id: $user_id) {
       id
+      user_repository_version
       repository {
         id
         name
@@ -30,7 +31,7 @@ export const GET_REPOSITORY = gql`
       name
       description
       version
-      releaseNotes
+      release_notes
     }
   }
 `;
@@ -41,14 +42,23 @@ export const SEARCH_REPOSITORY = gql`
       id
       name
       version
+      release_notes
     }
   }
 `;
 
 export const ADD_USER_REPOSITORY = gql`
-  mutation AddUserRepo($user_id: ID!, $repository_id: ID!) {
+  mutation AddUserRepo(
+    $user_id: ID!
+    $repository_id: ID!
+    $user_repository_version: String!
+  ) {
     addUserRepository(
-      userRepo: { user_id: $user_id, repository_id: $repository_id }
+      userRepo: {
+        user_id: $user_id
+        repository_id: $repository_id
+        user_repository_version: $user_repository_version
+      }
     ) {
       id
       user {

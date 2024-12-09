@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 
 const Item = ({ data }: any) => {
   const navigate = useNavigate();
-  const { repository } = data;
+  const { repository, user_repository_version } = data;
   const { id, name, version } = repository;
   const handleClick = (e: any) => {
     navigate(`?libraryId=${id}`);
@@ -29,16 +29,17 @@ const Item = ({ data }: any) => {
     });
   };
   return (
-    <div className="my-12 border-2 border-sky-500 flex flex-col">
-      <div className="flex justify-end items-end">
-        <CloseButton onClick={handleRemove} />
-      </div>
+    <div className="my-4 border-2 border-sky-500 flex flex-col rounded-md">
       <div
         onClick={handleClick}
-        className="flex flex-col gap-2  p-8 cursor-pointer"
+        className="flex gap-2  p-2 cursor-pointer justify-between"
       >
-        <div>{name}</div>
-        <div>v.{version}</div>
+        <div className="flex gap-2 items-center">
+          <div>{name} - </div>
+          <div>{version}</div>
+        </div>
+        {user_repository_version !== version && <div>New</div>}
+        <CloseButton onClick={handleRemove} />
       </div>
     </div>
   );
