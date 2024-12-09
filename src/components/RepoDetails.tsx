@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  ADD_USER_REPOSITORY,
   GET_REPOSITORY,
   GET_USER_REPOSITORIES,
+  REFRESH_REPOSITORY_VERSION,
   UPDATE_USER_REPOSITORY_VERSION,
 } from "../queries";
 import { Button } from "./ui/button";
@@ -23,18 +23,16 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
     variables: { id },
   });
 
-  const [addUserRepository, { data: newAddedRepo }] = useMutation(
-    ADD_USER_REPOSITORY,
-    {
-      refetchQueries: [
-        { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
-      ],
-    }
-  );
-
   const [updateUserRepository] = useMutation(UPDATE_USER_REPOSITORY_VERSION, {
     refetchQueries: [
       { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
+    ],
+  });
+
+  const [fetchLatestVersion] = useMutation(REFRESH_REPOSITORY_VERSION, {
+    refetchQueries: [
+      { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
+      { query: GET_REPOSITORY, variables: { id } },
     ],
   });
 
@@ -42,22 +40,20 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
 
   const { repository } = data || {};
   const { name, description, version, release_notes } = repository || {};
-  console.log("user_repository_id,version", user_repository_version, version);
-  const handleClick = () => {
-    addUserRepository({
-      variables: {
-        user_id: "1",
-        repository_id: id,
-        user_repository_version: version,
-      },
-    });
-  };
 
   const markRead = () => {
     updateUserRepository({
       variables: {
         id: userRepoId,
         user_repository_version: version,
+      },
+    });
+  };
+
+  const handleRefresh = () => {
+    fetchLatestVersion({
+      variables: {
+        id: id,
       },
     });
   };
@@ -70,13 +66,15 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
         <div className="flex flex-col gap-8">
           <div className="flex flex-row justify-between">
             <div className="flex flex-row gap-4">
-              <p className="text-4xl font-bold	">{name} :</p>
+              {name && <p className="text-4xl font-bold	">{name} :</p>}
               <p className="text-4xl font-semibold">{version}</p>
             </div>
-            {isExistingRepo && user_repository_version !== version && (
-              <Button onClick={markRead}>Mark As Read</Button>
-            )}
-            {!isExistingRepo && <Button onClick={handleClick}>Add</Button>}
+            {isExistingRepo &&
+              (user_repository_version !== version ? (
+                <Button onClick={markRead}>Mark As Read</Button>
+              ) : (
+                <Button onClick={handleRefresh}>Refresh</Button>
+              ))}
           </div>
           <p>{description}</p>
           {release_notes?.length && (

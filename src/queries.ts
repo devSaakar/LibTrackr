@@ -99,3 +99,13 @@ export const UPDATE_USER_REPOSITORY_VERSION = gql`
     }
   }
 `;
+
+export const REFRESH_REPOSITORY_VERSION = gql`
+  mutation UpdateLatestRepository($id: ID!) {
+    updateRepositoryById(id: $id) {
+      id
+      name
+      version
+    }
+  }
+`;

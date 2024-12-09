@@ -24,25 +24,26 @@ const AutoComplete = ({
   };
 
   return (
-    <Command>
+    <Command className="border-2 border-gray-700">
       <CommandInput
         placeholder="Search framework..."
         value={inputValue}
         onChangeCapture={handleInputChange}
       />
       <CommandList>
-        {options && options.length > 0 ? (
-          options.map((option: Option, index: number) => (
-            <CommandItem
-              key={index}
-              onSelect={() => handleSelect(option.value)}
-            >
-              {option.label}
-            </CommandItem>
-          ))
-        ) : (
-          <CommandItem disabled>No results found</CommandItem>
-        )}
+        {options && options.length > 0
+          ? options.map((option: Option, index: number) => (
+              <CommandItem
+                key={index}
+                onSelect={() => handleSelect(option.value)}
+              >
+                {option.label}
+              </CommandItem>
+            ))
+          : inputValue &&
+            options.length === 0 && (
+              <CommandItem disabled>No results found</CommandItem>
+            )}
       </CommandList>
     </Command>
   );
