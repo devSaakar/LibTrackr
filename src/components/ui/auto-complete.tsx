@@ -36,6 +36,7 @@ const AutoComplete = ({
               <CommandItem
                 key={index}
                 onSelect={() => handleSelect(option.value)}
+                className="cursor-pointer"
               >
                 {option.label}
               </CommandItem>
