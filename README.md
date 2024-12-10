@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Getting Started with App
+
+Create .env.local file in root take reference from .env.sample and update the values
+
+## Create .env.local file
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
