@@ -4,6 +4,10 @@ import { GET_USER_REPOSITORIES, REMOVE_USER_REPOSITORY } from "../../queries";
 import { useMutation } from "@apollo/client";
 import { Badge } from "../ui/badge";
 import { cn } from "../../lib/utils";
+import {
+  RemoveUserRepoMutation,
+  RemoveUserRepoMutationVariables,
+} from "@/gql/graphql";
 
 const Item = ({ data }: any) => {
   const navigate = useNavigate();
@@ -18,14 +22,14 @@ const Item = ({ data }: any) => {
     navigate(`?libraryId=${id}`);
   };
 
-  const [removeUserRepository, { data: removedRepo }] = useMutation(
-    REMOVE_USER_REPOSITORY,
-    {
-      refetchQueries: [
-        { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
-      ],
-    }
-  );
+  const [removeUserRepository] = useMutation<
+    RemoveUserRepoMutation,
+    RemoveUserRepoMutationVariables
+  >(REMOVE_USER_REPOSITORY, {
+    refetchQueries: [
+      { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
+    ],
+  });
 
   const handleRemove = () => {
     removeUserRepository({

@@ -9,6 +9,12 @@ import { Button } from "./ui/button";
 import ReleaseNotes from "./ReleaseNotes";
 import BackButton from "./ui/back-button";
 import { useNavigate } from "react-router-dom";
+import {
+  GetRepositoryQuery,
+  GetRepositoryQueryVariables,
+  UpdateUserRepoMutation,
+  UpdateUserRepoMutationVariables,
+} from "@/gql/graphql";
 
 interface RepoDetailsProps {
   id: string;
@@ -23,11 +29,17 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const { loading, error, data } = useQuery(GET_REPOSITORY, {
+  const { loading, data } = useQuery<
+    GetRepositoryQuery,
+    GetRepositoryQueryVariables
+  >(GET_REPOSITORY, {
     variables: { id },
   });
 
-  const [updateUserRepository] = useMutation(UPDATE_USER_REPOSITORY_VERSION, {
+  const [updateUserRepository] = useMutation<
+    UpdateUserRepoMutation,
+    UpdateUserRepoMutationVariables
+  >(UPDATE_USER_REPOSITORY_VERSION, {
     refetchQueries: [
       { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
     ],
@@ -49,7 +61,7 @@ const RepoDetails: React.FC<RepoDetailsProps> = ({
     updateUserRepository({
       variables: {
         id: userRepoId,
-        user_repository_version: version,
+        user_repository_version: version as string,
       },
     });
   };

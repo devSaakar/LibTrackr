@@ -13,6 +13,12 @@ import AutoComplete from "../components/ui/auto-complete";
 import { debounce } from "../helperUtils";
 import { Button } from "../components/ui/button";
 import { cn } from "../lib/utils";
+import {
+  AddUserRepoMutation,
+  AddUserRepoMutationVariables,
+  GetUserRepoQueryQuery,
+  GetUserRepoQueryQueryVariables,
+} from "@/gql/graphql";
 
 const UserRepo = () => {
   const navigate = useNavigate();
@@ -25,18 +31,21 @@ const UserRepo = () => {
   const [searchValue, setSearchValue] = useState("");
   const [options, setOptions] = useState([]);
 
-  const { data, loading } = useQuery(GET_USER_REPOSITORIES, {
+  const { data, loading } = useQuery<
+    GetUserRepoQueryQuery,
+    GetUserRepoQueryQueryVariables
+  >(GET_USER_REPOSITORIES, {
     variables: { user_id: "1" },
   });
 
-  const [addUserRepository, { loading: addRepoLoading }] = useMutation(
-    ADD_USER_REPOSITORY,
-    {
-      refetchQueries: [
-        { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
-      ],
-    }
-  );
+  const [addUserRepository, { loading: addRepoLoading }] = useMutation<
+    AddUserRepoMutation,
+    AddUserRepoMutationVariables
+  >(ADD_USER_REPOSITORY, {
+    refetchQueries: [
+      { query: GET_USER_REPOSITORIES, variables: { user_id: "1" } },
+    ],
+  });
 
   const { data: searchData } = useQuery(SEARCH_REPOSITORY, {
     variables: { search: searchValue },
@@ -94,7 +103,7 @@ const UserRepo = () => {
     addUserRepository({
       variables: {
         user_id: "1",
-        repository_id: libraryId,
+        repository_id: libraryId as string,
         user_repository_version: selectedRepo.version,
       },
     });
