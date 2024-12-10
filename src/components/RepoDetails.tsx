@@ -14,12 +14,13 @@ import {
   GetRepositoryQueryVariables,
   UpdateUserRepoMutation,
   UpdateUserRepoMutationVariables,
+  UserRepository,
 } from "@/gql/graphql";
 
 interface RepoDetailsProps {
   id: string;
   isExistingRepo: boolean;
-  userRepoDetail: any;
+  userRepoDetail: UserRepository;
 }
 
 const RepoDetails: React.FC<RepoDetailsProps> = ({

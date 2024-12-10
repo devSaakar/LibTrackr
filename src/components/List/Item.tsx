@@ -7,9 +7,15 @@ import { cn } from "../../lib/utils";
 import {
   RemoveUserRepoMutation,
   RemoveUserRepoMutationVariables,
+  UserRepository,
 } from "@/gql/graphql";
+import { FC } from "react";
 
-const Item = ({ data }: any) => {
+interface ItemProps {
+  data: UserRepository;
+}
+
+const Item: FC<ItemProps> = ({ data }) => {
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -18,7 +24,8 @@ const Item = ({ data }: any) => {
   const { repository, user_repository_version } = data;
   const libraryId = searchParams.get("libraryId");
   const { id, name, version } = repository;
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     navigate(`?libraryId=${id}`);
   };
 
@@ -31,7 +38,13 @@ const Item = ({ data }: any) => {
     ],
   });
 
-  const handleRemove = () => {
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (libraryId === id) {
+      navigate({
+        pathname: window.location.pathname,
+      });
+    }
     removeUserRepository({
       variables: {
         user_id: "1",

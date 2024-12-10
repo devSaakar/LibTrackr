@@ -1,10 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import Item from "./Item";
+import { UserRepository } from "@/gql/graphql";
 
-const List = ({ data }: any) => {
+interface ListProps {
+  data: [UserRepository];
+}
+
+const List: FC<ListProps> = ({ data }) => {
   return (
     <div>
-      {data?.map((repo: any) => {
+      {data?.map((repo) => {
         const { id } = repo;
         return <Item key={id} data={repo} />;
       })}

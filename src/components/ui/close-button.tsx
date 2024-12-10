@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Button } from "./button";
 
 interface CloseButtonProps {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const CloseButton: FC<CloseButtonProps> = ({ onClick }) => {

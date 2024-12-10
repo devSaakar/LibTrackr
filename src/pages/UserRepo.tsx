@@ -18,6 +18,8 @@ import {
   AddUserRepoMutationVariables,
   GetUserRepoQueryQuery,
   GetUserRepoQueryQueryVariables,
+  Repository,
+  UserRepository,
 } from "@/gql/graphql";
 
 const UserRepo = () => {
@@ -55,11 +57,19 @@ const UserRepo = () => {
   const { searchRepository } = searchData || {};
 
   useEffect(() => {
+    if (!searchValue) {
+      navigate({
+        pathname: window.location.pathname,
+      });
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
     if (searchRepository) {
       if (searchRepository.length === 1) {
         navigate(`?libraryId=${searchRepository[0].id}`);
       } else {
-        const options = searchRepository.map((repo: any) => {
+        const options = searchRepository.map((repo: Repository) => {
           return {
             value: repo.id,
             label: repo.name,
@@ -110,11 +120,11 @@ const UserRepo = () => {
   };
 
   return (
-    <div className="flex flex-col md:px-2 lg:px-8 ">
-      <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col md:px-2 lg:px-8">
+      <div className="flex flex-col lg:flex-row  min-h-screen">
         <ScrollArea className="basis-1/4 flex flex-col justify-start items-center  max-h-screen  overflow-y-auto px-4 cursor-pointer relative">
-          <div className="absolute w-11/12">
-            <div className="flex flex-row mt-4 gap-2 z-10">
+          <div className="absolute w-11/12 bg-white py-2">
+            <div className="flex flex-row mt-4 gap-2 z-1000">
               <AutoComplete
                 handleSearch={handleSearch}
                 options={options}
@@ -130,7 +140,7 @@ const UserRepo = () => {
             </div>
           </div>
           <div className={cn("mt-20", libraryId ? "hidden lg:block" : "block")}>
-            <List data={userRepositoriesByUserId} />
+            <List data={userRepositoriesByUserId as [UserRepository]} />
           </div>
         </ScrollArea>
         {libraryId && (
@@ -143,7 +153,7 @@ const UserRepo = () => {
             <RepoDetails
               id={libraryId}
               isExistingRepo={isExistingRepo}
-              userRepoDetail={userRepoDetail}
+              userRepoDetail={userRepoDetail as UserRepository}
             />
           </ScrollArea>
         )}
